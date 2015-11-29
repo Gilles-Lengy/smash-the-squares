@@ -72,6 +72,15 @@ smashthesquaresastheycome.Game.prototype = {
         this.malus = this.game.add.group();
         this.malus.enableBody = true;
 
+        // Init emitter for squares explosions
+        this.game.explosionEmitter = this.game.add.emitter(0, 0, 777);
+        this.game.explosionEmitter.makeParticles('square');
+        this.game.explosionEmitter.setYSpeed(-333, 333);
+        this.game.explosionEmitter.setXSpeed(-333, 333);
+        this.game.explosionEmitter.minParticleScale = 0.5;
+        this.game.explosionEmitter.maxParticleScale = 0.9;
+        this.game.explosionEmitter.gravity = 0;
+
 
     },
     update: function () {
@@ -191,13 +200,17 @@ smashthesquaresastheycome.Game.prototype = {
 
         this.hitAlphaSquareSound.play();
 
-
+// Emit particles
+        this.game.explosionEmitter.x = square.x;
+        this.game.explosionEmitter.y = square.y;
+        this.game.explosionEmitter.start(true, 777, null, 33);
         square.destroy();
 
         this.score += 1;
 
         this.scoreText.text = this.scoreString + this.score;
         this.scoreText.x = this.game.world.centerX - this.scoreText.textWidth / 2;
+
 
         // Stock score and best score
         this.recordBestScore();
