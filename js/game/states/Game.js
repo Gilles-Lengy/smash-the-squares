@@ -96,7 +96,14 @@ smashthesquaresastheycome.Game.prototype = {
         this.game.physics.arcade.collide(this.squares);
         // To handle collision between members of a group so so they bounce with each other
         this.game.physics.arcade.collide(this.malus);
+        // To handle collision between members of a squares and malus group so they bounce with each other
         this.game.physics.arcade.collide(this.squares, this.malus);
+        // To handle collision between members of a explosionEmitter and malus group so they bounce with each other
+        this.game.physics.arcade.collide(this.game.explosionEmitter, this.malus);
+        // To handle collision between members of a explosionEmitter and squares group so they bounce with each other
+        this.game.physics.arcade.collide(this.game.explosionEmitter,this.squares);
+        // To handle collision between members of a explosionEmitters so they bounce with each other
+        this.game.physics.arcade.collide(this.game.explosionEmitter);
 
         if (this.squareOnTheScreenCounter > this.maximumSquareOntheScreen) {
             this.onEndGame.play();
@@ -207,7 +214,7 @@ smashthesquaresastheycome.Game.prototype = {
 // Emit particles
         this.game.explosionEmitter.x = square.x;
         this.game.explosionEmitter.y = square.y;
-        this.game.explosionEmitter.start(true, 2000, null, 33);
+        this.game.explosionEmitter.start(true, Phaser.Timer.SECOND * 7, null, 11);
         square.destroy();
 
         this.score += 1;
