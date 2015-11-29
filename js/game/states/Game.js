@@ -110,6 +110,10 @@ smashthesquaresastheycome.Game.prototype = {
         this.squares.destroy();
 
         this.scoreText.destroy();
+        this.squareCounterDisplay.destroy();
+        this.squareCounterText.destroy();
+
+        this.game.explosionEmitter.destroy();
 
 
         this.game.score = this.score;
@@ -203,7 +207,7 @@ smashthesquaresastheycome.Game.prototype = {
 // Emit particles
         this.game.explosionEmitter.x = square.x;
         this.game.explosionEmitter.y = square.y;
-        this.game.explosionEmitter.start(true, 777, null, 33);
+        this.game.explosionEmitter.start(true, 2000, null, 33);
         square.destroy();
 
         this.score += 1;
