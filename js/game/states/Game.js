@@ -9,7 +9,7 @@ smashthesquaresastheycome.Game.prototype = {
         // Vars
         this.squareNumber = 7777;
         this.malusNumber = 5555;
-        this.squareOnTheScreenCounterString = "Square on the screen : ";
+        this.squareOnTheScreenCounterString = "Squares on the screen : ";
         this.squareOnTheScreenCounter = 0;
         this.maximumSquareOntheScreen = 18;
         this.scoreString = "Score : ";
@@ -115,7 +115,7 @@ smashthesquaresastheycome.Game.prototype = {
      *******************************/
     alphaSquareGenerator: function (origin, group) {
 
-        var squareX, squareY;
+        var squareX, squareY, s;
 
         switch (origin) {
             case 0 :
@@ -141,11 +141,11 @@ smashthesquaresastheycome.Game.prototype = {
 
 
         if (group === 'squares') {
-            var s = this.squares.create(squareX, squareY, 'square');
+            s = this.squares.create(squareX, squareY, 'square');
             s.name = 'blackSquare' + this.squareNumber;
             s.tint = 0x000000;
         } else {
-            var s = this.malus.create(squareX, squareY, 'square');
+            s = this.malus.create(squareX, squareY, 'square');
             s.name = 'redSquare' + this.malusNumber;
             s.tint = 0xff0000;
         }
