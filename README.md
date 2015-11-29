@@ -1,8 +1,8 @@
-# smash-the-squares-as-they-come
+# smash-the-squares
 
 Un microjeu par Gilles lengy.
 
-On pilote un gros carré noir...
+On controle un gros carré noir...
 
 Des carrés apparaissent successivement...
 
