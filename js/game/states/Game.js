@@ -214,7 +214,7 @@ smashthesquaresastheycome.Game.prototype = {
 // Emit particles
         this.game.explosionEmitter.x = square.x;
         this.game.explosionEmitter.y = square.y;
-        this.game.explosionEmitter.start(true, Phaser.Timer.SECOND * 7, null, 11);
+        this.game.explosionEmitter.start(true, Phaser.Timer.SECOND * 20, null, 11);
         square.destroy();
 
         this.score += 1;
