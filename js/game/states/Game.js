@@ -7,13 +7,13 @@ smashthesquaresastheycome.Game.prototype = {
     create: function () {
 
         // Vars
-        this.squareNumber = 1000;
+        this.squareNumber = 7777;
         this.scoreString = "Score : ";
         this.score = 0;
 
         // Sounds
         this.onTimer1 = this.add.audio('onTimer1');
-        //this.hitAlphaSquareSound = this.game.add.audio('hitAlphaSquare');
+        this.hitAlphaSquareSound = this.game.add.audio('hitAlphaSquare');
         //this.hitBlackSquareSound = this.game.add.audio('hitBlackSquare');
         this.onEndGame = this.add.audio('onEndGame');
 
@@ -33,7 +33,7 @@ smashthesquaresastheycome.Game.prototype = {
         this.scoreText.tint = 0xdedede;
 
         // Repeating events
-        this.game.time.events.repeat(Phaser.Timer.SECOND, this.squareNumber, this.waveGenerator, this);
+        this.game.time.events.repeat(444, this.squareNumber, this.squaresGenerator, this);
 
         // Player
         this.player = this.add.sprite(this.game.world.centerX, this.game.world.centerY, 'square');
@@ -59,6 +59,8 @@ smashthesquaresastheycome.Game.prototype = {
 
         // To handle player and alphasquare squares collision
         this.game.physics.arcade.collide(this.player, this.squares, this.sHit, null, this);
+        // To handle collision between members of a group so so they bounce with each other
+        this.game.physics.arcade.collide(this.squares);
 
 
     },
@@ -79,7 +81,69 @@ smashthesquaresastheycome.Game.prototype = {
     /******************************
      * THE GAME'S FUNCTIONS
      *******************************/
-   
+    alphaSquareGenerator: function (origin) {
+
+        var squareX, squareY;
+
+        switch (origin) {
+            case 0 :
+                squareX = this.game.world.randomX;
+                squareY = 0;
+                break;
+            case 1:
+                squareX = this.game.world.width;
+                squareY = this.game.world.randomY;
+                break;
+            case 2:
+                squareX = this.game.world.randomX;
+                squareY = this.game.world.height;
+                break;
+            case 3:
+                squareX = 0;
+                squareY = this.game.world.randomY;
+                break;
+            default :
+                squareX = 0;
+                squareY = 0;
+        }
+
+        var s = this.squares.create(squareX, squareY, 'square');
+        s.anchor.setTo(0.5);
+        s.scale.setTo(4);
+        s.name = 'square' + this.squareNumber;
+        s.tint = 0x000000;
+        s.body.collideWorldBounds = true;
+        s.body.bounce.setTo(0.8, 0.8);
+        s.body.velocity.setTo(20 + Math.random() * 60, 20 + Math.random() * 60);
+
+    },
+    squaresGenerator: function () {
+        this.onTimer1.play();
+
+        var side = this.game.rnd.integerInRange(0, 3);
+
+        this.alphaSquareGenerator(side);
+
+        this.squareNumber -= 1;
+    },
+    sHit: function (player, square) {
+
+        this.hitAlphaSquareSound.play();
+
+
+        square.destroy();
+
+        this.score += 1;
+
+        this.scoreText.text = this.scoreString + this.score;
+        this.scoreText.x = this.game.world.centerX - this.scoreText.textWidth / 2;
+
+        // Stock score and best score
+        this.recordBestScore();
+
+
+
+    },
 
     recordBestScore: function () {
         // Stock score and best score
