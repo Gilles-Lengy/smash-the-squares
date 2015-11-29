@@ -8,6 +8,9 @@ smashthesquaresastheycome.Game.prototype = {
 
         // Vars
         this.squareNumber = 7777;
+        this.squareOnTheScreenCounterString = "Square on the screen : ";
+        this.squareOnTheScreenCounter = 0;
+        this.maximumSquareOntheScreen = 8;
         this.scoreString = "Score : ";
         this.score = 0;
 
@@ -26,11 +29,26 @@ smashthesquaresastheycome.Game.prototype = {
             this.bestScore = 'N/A';
         }
 
+        // Square counter display
+
+        this.squareCounterDisplay = this.game.add.bitmapText(10, 10, 'squareFont', this.squareOnTheScreenCounter, 180);
+        this.squareCounterDisplay.x = this.game.world.centerX - this.squareCounterDisplay.textWidth / 2;
+        this.squareCounterDisplay.y = this.game.world.centerY - this.squareCounterDisplay.textHeight / 2;
+        this.squareCounterDisplay.tint = 0xdedede;
+
+        // Squares Counter Text
+        this.squareCounterText = this.game.add.bitmapText(10, 10, 'squareFont', this.squareOnTheScreenCounterString, 88);
+        this.squareCounterText.x = this.game.world.centerX - this.squareCounterText.textWidth / 2;
+        this.squareCounterText.y = this.squareCounterDisplay.y  - 150;
+        this.squareCounterText.tint = 0xdedede;
+
         // Score text
         this.scoreText = this.game.add.bitmapText(10, 10, 'squareFont', this.scoreString + this.score, 88);
         this.scoreText.x = this.game.world.centerX - this.scoreText.textWidth / 2;
-        this.scoreText.y = this.game.world.centerY - this.scoreText.textHeight / 2;
+        this.scoreText.y = this.squareCounterText.y  - 150;
         this.scoreText.tint = 0xdedede;
+
+
 
         // Repeating events
         this.game.time.events.repeat(444, this.squareNumber, this.squaresGenerator, this);
@@ -61,6 +79,11 @@ smashthesquaresastheycome.Game.prototype = {
         this.game.physics.arcade.collide(this.player, this.squares, this.sHit, null, this);
         // To handle collision between members of a group so so they bounce with each other
         this.game.physics.arcade.collide(this.squares);
+
+        if (this.squareOnTheScreenCounter > this.maximumSquareOntheScreen) {
+            this.onEndGame.play();
+            this.state.start('GameOver');
+        }
 
 
     },
@@ -125,8 +148,16 @@ smashthesquaresastheycome.Game.prototype = {
         this.alphaSquareGenerator(side);
 
         this.squareNumber -= 1;
+
+        this.squareOnTheScreenCounter += 1;
+
+
+        this.squareCounterDisplay.text = this.squareOnTheScreenCounter;
+        this.squareCounterDisplay.x = this.game.world.centerX - this.squareCounterDisplay.textWidth / 2;
     },
     sHit: function (player, square) {
+
+        this.squareOnTheScreenCounter -= 1;
 
         this.hitAlphaSquareSound.play();
 
