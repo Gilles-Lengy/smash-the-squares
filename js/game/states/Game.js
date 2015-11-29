@@ -8,9 +8,10 @@ smashthesquaresastheycome.Game.prototype = {
 
         // Vars
         this.squareNumber = 7777;
+        this.malusNumber = 5555;
         this.squareOnTheScreenCounterString = "Square on the screen : ";
         this.squareOnTheScreenCounter = 0;
-        this.maximumSquareOntheScreen = 8;
+        this.maximumSquareOntheScreen = 18;
         this.scoreString = "Score : ";
         this.score = 0;
 
@@ -39,19 +40,19 @@ smashthesquaresastheycome.Game.prototype = {
         // Squares Counter Text
         this.squareCounterText = this.game.add.bitmapText(10, 10, 'squareFont', this.squareOnTheScreenCounterString, 88);
         this.squareCounterText.x = this.game.world.centerX - this.squareCounterText.textWidth / 2;
-        this.squareCounterText.y = this.squareCounterDisplay.y  - 150;
+        this.squareCounterText.y = this.squareCounterDisplay.y - 150;
         this.squareCounterText.tint = 0xdedede;
 
         // Score text
         this.scoreText = this.game.add.bitmapText(10, 10, 'squareFont', this.scoreString + this.score, 88);
         this.scoreText.x = this.game.world.centerX - this.scoreText.textWidth / 2;
-        this.scoreText.y = this.squareCounterText.y  - 150;
+        this.scoreText.y = this.squareCounterText.y - 150;
         this.scoreText.tint = 0xdedede;
-
 
 
         // Repeating events
         this.game.time.events.repeat(444, this.squareNumber, this.squaresGenerator, this);
+        this.game.time.events.repeat(Phaser.Timer.SECOND * 5, this.malusNumber, this.malusGenerator, this);
 
         // Player
         this.player = this.add.sprite(this.game.world.centerX, this.game.world.centerY, 'square');
@@ -67,6 +68,9 @@ smashthesquaresastheycome.Game.prototype = {
         this.squares = this.game.add.group();
         this.squares.enableBody = true;
 
+        // Malus Red squares group
+        this.malus = this.game.add.group();
+        this.malus.enableBody = true;
 
 
     },
@@ -77,8 +81,13 @@ smashthesquaresastheycome.Game.prototype = {
 
         // To handle player and alphasquare squares collision
         this.game.physics.arcade.collide(this.player, this.squares, this.sHit, null, this);
+        // To handle player and malus squares collision
+        this.game.physics.arcade.collide(this.player, this.malus, this.mHit, null, this);
         // To handle collision between members of a group so so they bounce with each other
         this.game.physics.arcade.collide(this.squares);
+        // To handle collision between members of a group so so they bounce with each other
+        this.game.physics.arcade.collide(this.malus);
+        this.game.physics.arcade.collide(this.squares, this.malus);
 
         if (this.squareOnTheScreenCounter > this.maximumSquareOntheScreen) {
             this.onEndGame.play();
@@ -104,7 +113,7 @@ smashthesquaresastheycome.Game.prototype = {
     /******************************
      * THE GAME'S FUNCTIONS
      *******************************/
-    alphaSquareGenerator: function (origin) {
+    alphaSquareGenerator: function (origin, group) {
 
         var squareX, squareY;
 
@@ -130,11 +139,20 @@ smashthesquaresastheycome.Game.prototype = {
                 squareY = 0;
         }
 
-        var s = this.squares.create(squareX, squareY, 'square');
+
+        if (group === 'squares') {
+            var s = this.squares.create(squareX, squareY, 'square');
+            s.name = 'blackSquare' + this.squareNumber;
+            s.tint = 0x000000;
+        } else {
+            var s = this.malus.create(squareX, squareY, 'square');
+            s.name = 'redSquare' + this.malusNumber;
+            s.tint = 0xff0000;
+        }
+
         s.anchor.setTo(0.5);
         s.scale.setTo(4);
-        s.name = 'square' + this.squareNumber;
-        s.tint = 0x000000;
+
         s.body.collideWorldBounds = true;
         s.body.bounce.setTo(0.8, 0.8);
         s.body.velocity.setTo(20 + Math.random() * 60, 20 + Math.random() * 60);
@@ -145,7 +163,7 @@ smashthesquaresastheycome.Game.prototype = {
 
         var side = this.game.rnd.integerInRange(0, 3);
 
-        this.alphaSquareGenerator(side);
+        this.alphaSquareGenerator(side, 'squares');
 
         this.squareNumber -= 1;
 
@@ -154,6 +172,18 @@ smashthesquaresastheycome.Game.prototype = {
 
         this.squareCounterDisplay.text = this.squareOnTheScreenCounter;
         this.squareCounterDisplay.x = this.game.world.centerX - this.squareCounterDisplay.textWidth / 2;
+    },
+    malusGenerator: function () {
+
+        this.onTimer1.play();
+
+        var side = this.game.rnd.integerInRange(0, 3);
+
+        this.alphaSquareGenerator(side, 'malus');
+
+        this.malusNumber -= 1;
+
+
     },
     sHit: function (player, square) {
 
@@ -173,9 +203,14 @@ smashthesquaresastheycome.Game.prototype = {
         this.recordBestScore();
 
 
+    },
+    mHit: function () {
+
+        this.onEndGame.play();
+        this.state.start('GameOver');
+
 
     },
-
     recordBestScore: function () {
         // Stock score and best score
         if (!!localStorage) {
@@ -190,4 +225,5 @@ smashthesquaresastheycome.Game.prototype = {
         }
     }
 
-};
+}
+;
