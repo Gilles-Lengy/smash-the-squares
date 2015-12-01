@@ -24,7 +24,7 @@ smashthesquaresastheycome.Game.prototype = {
         // Local storage
         // Best score
         if (!!localStorage) {
-            this.bestScore = localStorage.getItem('bestScoreSquaresInvasion');
+            this.bestScore = localStorage.getItem('bestScoreSmashSquares');
         } else {
             // Fallback. LocalStorage isn't available
             this.bestScore = 'N/A';
@@ -238,10 +238,10 @@ smashthesquaresastheycome.Game.prototype = {
     recordBestScore: function () {
         // Stock score and best score
         if (!!localStorage) {
-            this.bestScoreStored = localStorage.getItem('bestScoreSquaresInvasion');
+            this.bestScoreStored = localStorage.getItem('bestScoreSmashSquares');
             if (!this.bestScoreStored || this.bestScore < this.score) {
                 this.bestScore = this.score;
-                localStorage.setItem('bestScoreSquaresInvasion', this.bestScore);
+                localStorage.setItem('bestScoreSmashSquares', this.bestScore);
             }
         } else {
             // Fallback. LocalStorage isn't available

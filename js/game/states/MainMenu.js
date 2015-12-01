@@ -14,7 +14,7 @@ smashthesquaresastheycome.MainMenu.prototype = {
         this.player.events.onInputDown.add(this.playGame, this);
 
         // Title of the game
-        this.gameTitleText = this.game.add.bitmapText(0, 0, 'squareFont', 'Squares Attack', 69);
+        this.gameTitleText = this.game.add.bitmapText(0, 0, 'squareFont', 'Smash the Squares !', 69);
         this.gameTitleText.x = this.game.world.centerX - this.gameTitleText.textWidth / 2;
         this.gameTitleText.y = this.player.y - 150;
         this.gameTitleText.tint = 0xdddddd;
