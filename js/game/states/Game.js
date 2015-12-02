@@ -179,7 +179,6 @@ smashthesquaresastheycome.Game.prototype = {
 
     },
     squaresGenerator: function () {
-        this.onTimer1.play();
 
         var side = this.game.rnd.integerInRange(0, 3);
 
@@ -188,6 +187,41 @@ smashthesquaresastheycome.Game.prototype = {
         this.squareNumber -= 1;
 
         this.squareOnTheScreenCounter += 1;
+
+        // Bip every last 10 seconds with increasing volume
+        switch (this.squareOnTheScreenCounter) {
+            case 10:
+                this.onTimer1.volume = 0.2;
+                break;
+            case 11:
+                this.onTimer1.volume = 0.3;
+                break;
+            case 12:
+                this.onTimer1.volume = 0.4;
+                break;
+            case 13:
+                this.onTimer1.volume = 0.5;
+                break;
+            case 14:
+                this.onTimer1.volume = 0.6;
+                break;
+            case 15:
+                this.onTimer1.volume = 0.7;
+                break;
+            case 16:
+                this.onTimer1.volume = 0.8;
+                break;
+            case 17:
+                this.onTimer1.volume = 0.9;
+                break;
+            case 18:
+                this.onTimer1.volume = 1;
+                break;
+            default :
+                this.onTimer1.volume = 0;
+        }
+        this.onTimer1.play();
+
 
 
         this.squareCounterDisplay.text = this.squareOnTheScreenCounter;
