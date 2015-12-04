@@ -135,28 +135,40 @@ smashthesquaresastheycome.Game.prototype = {
      *******************************/
     alphaSquareGenerator: function (origin, group) {
 
-        var squareX, squareY, s;
+        var squareX, squareY, vX, vY, s;
+
+        var randomBonusDirection = this.game.rnd.integerInRange(0, 1);
 
         switch (origin) {
             case 0 :
                 squareX = this.game.world.randomX;
                 squareY = 0;
+                vX = this.vxvy(randomBonusDirection);
+                vY = this.vxvy(0);
                 break;
             case 1:
                 squareX = this.game.world.width;
                 squareY = this.game.world.randomY;
+                vX = this.vxvy(1);
+                vY = this.vxvy(randomBonusDirection);
                 break;
             case 2:
                 squareX = this.game.world.randomX;
                 squareY = this.game.world.height;
+                vX = this.vxvy(randomBonusDirection);
+                vY = this.vxvy(1);
                 break;
             case 3:
                 squareX = 0;
                 squareY = this.game.world.randomY;
+                vX = this.vxvy(0);
+                vY = this.vxvy(randomBonusDirection);
                 break;
             default :
                 squareX = 0;
                 squareY = 0;
+                vX = this.vxvy(0);
+                vY = this.vxvy(0);
         }
 
 
@@ -175,7 +187,19 @@ smashthesquaresastheycome.Game.prototype = {
 
         s.body.collideWorldBounds = true;
         s.body.bounce.setTo(0.8, 0.8);
-        s.body.velocity.setTo(20 + Math.random() * 60, 20 + Math.random() * 60);
+        s.body.velocity.setTo(vX, vY);
+
+    },
+    vxvy: function (direction) {
+        var v;
+
+        v = 20 + Math.random() * 60;
+
+        if (direction === 0) {
+            return v;
+        } else {
+            return -v;
+        }
 
     },
     squaresGenerator: function () {
