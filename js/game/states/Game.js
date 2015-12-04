@@ -97,7 +97,7 @@ smashthesquaresastheycome.Game.prototype = {
         // To handle collision between members of a group so so they bounce with each other
         this.game.physics.arcade.collide(this.malus);
         // To handle collision between members of a squares and malus group so they bounce with each other
-        this.game.physics.arcade.collide(this.squares, this.malus);
+        //this.game.physics.arcade.collide(this.squares, this.malus);
         // To handle collision between members of a explosionEmitter and malus group so they bounce with each other
         this.game.physics.arcade.collide(this.game.explosionEmitter, this.malus);
         // To handle collision between members of a explosionEmitter and squares group so they bounce with each other
