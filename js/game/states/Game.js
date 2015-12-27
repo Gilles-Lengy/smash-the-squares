@@ -183,7 +183,6 @@ smashthesquaresastheycome.Game.prototype = {
         }
 
         s.anchor.setTo(0.5);
-        s.scale.setTo(4);
 
         s.body.collideWorldBounds = true;
         s.body.bounce.setTo(0.8, 0.8);
